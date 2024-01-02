@@ -86,3 +86,47 @@ var finances = [
   ['Jan-2017', 138230],
   ['Feb-2017', 671099],
 ];
+
+// Counting the number of items in the finances array
+const totalMonths = finances.length;
+
+// Adding up all the amounts for a total profit/loss.
+const totalProfitLoss = finances.reduce((sum, record) => sum + record[1], 0);
+
+// Setting up variables to keep track of the changes.
+let sumChanges = 0, change = 0;
+let biggestIncrease = Number.MIN_SAFE_INTEGER, biggestDecrease = Number.MAX_SAFE_INTEGER;
+let bestMonth = '', worstMonth = '';
+
+// Loop through the finances, but stop one short of the end.
+for (let i = 0; i < finances.length - 1; i++) {
+  // Calculate how much profit/loss changed from this month to the next.
+  change = finances[i + 1][1] - finances[i][1];
+  // Add this change to the sum.
+  sumChanges += change;
+
+  // Check if this is the biggest increase we've found so far
+  if (change > biggestIncrease) {
+    biggestIncrease = change;
+    bestMonth = finances[i + 1][0];
+  }
+
+  // Check if this is the biggest decrease we've found so far
+  if (change < biggestDecrease) {
+    biggestDecrease = change;
+    worstMonth = finances[i + 1][0];
+  }
+}
+
+// Find the average change by dividing the sum of changes by the number of changes
+const averageChange = (sumChanges / (finances.length - 1)).toFixed(2);
+
+// Show the results 
+console.log(`Financial Analysis
+----------------
+Total Months: ${totalMonths}
+Total: $${totalProfitLoss.toLocaleString()}
+Average Change: $${averageChange}
+Greatest Increase in Profits: ${bestMonth} ($${biggestIncrease.toLocaleString()})
+Greatest Decrease in Profits: ${worstMonth} ($${biggestDecrease.toLocaleString()})
+`);
